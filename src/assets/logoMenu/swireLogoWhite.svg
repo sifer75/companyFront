@@ -1,0 +1,28 @@
+<svg width="23" height="31" viewBox="0 0 23 31" fill="white" xmlns="http://www.w3.org/2000/svg">
+<g id="Frame 399">
+<g id="Mask group" opacity="0.9">
+<mask id="mask0_6145_30098" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="23" height="23">
+<g id="Group 9">
+<rect id="Rectangle 14" x="3.71875" y="15.9386" width="5.26076" height="17.043" transform="rotate(-135 3.71875 15.9386)" fill="white"/>
+<rect id="Rectangle 15" x="8.85547" y="3.36023" width="4.75207" height="14.088" transform="rotate(-45 8.85547 3.36023)" fill="white"/>
+<rect id="Rectangle 16" x="0.0234375" y="12.1986" width="4.75207" height="14.088" transform="rotate(-45 0.0234375 12.1986)" fill="white"/>
+</g>
+</mask>
+<g mask="url(#mask0_6145_30098)">
+<ellipse id="Ellipse 21" cx="9.12729" cy="13.161" rx="16.4281" ry="17.5809" fill="white"/>
+</g>
+</g>
+<g id="Mask group_2" opacity="0.9">
+<mask id="mask1_6145_30098" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="8" width="23" height="23">
+<g id="Group 10">
+<rect id="Rectangle 14_2" x="18.4648" y="15.0614" width="5.26076" height="17.043" transform="rotate(45 18.4648 15.0614)" fill="white"/>
+<rect id="Rectangle 15_2" x="13.3281" y="27.6398" width="4.75207" height="14.088" transform="rotate(135 13.3281 27.6398)" fill="white"/>
+<rect id="Rectangle 16_2" x="22.1641" y="18.8004" width="4.75207" height="14.088" transform="rotate(135 22.1641 18.8004)" fill="white"/>
+</g>
+</mask>
+<g mask="url(#mask1_6145_30098)">
+<ellipse id="Ellipse 23" cx="12.1061" cy="22.6731" rx="13.4499" ry="15.3713" fill="white"/>
+</g>
+</g>
+</g>
+</svg>
