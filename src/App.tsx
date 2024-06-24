@@ -1,4 +1,3 @@
-import "./App.css";
 import { Route, Routes } from "react-router-dom";
 import Dashboard from "./page/Dashboard";
 import Homepage from "./page/Connection/Homepage";

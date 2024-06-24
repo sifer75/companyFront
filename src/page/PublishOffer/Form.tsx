@@ -246,6 +246,21 @@ function Form() {
                 fields: fields,
                 disponibility: disponibility,
                 language: language,
+                companyId: null,
+                competence: null,
+                createdAt: "",
+                description: null,
+                duration: null,
+                experience: null,
+                fieldOfStudy: null,
+                id: 0,
+                jobDescription: null,
+                likes: [],
+                mission: null,
+                question: null,
+                studyLevel: null,
+                updatedAt: "",
+                value: null
               });
             }}
           ></Button>

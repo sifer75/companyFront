@@ -121,6 +121,14 @@ export const getUserJobLikedCount = async () => {
   return response.json();
 };
 
-// export const getUserWhoLikedJob = async (userId: number) => {
-
-// }
+export const getUserWhoLikedJob = async (id: number) => {
+  const response = await fetch(`http://localhost:3333/user/${id}`, {
+    method: "GET",
+    headers: { "Content-Type": "application/json" },
+    credentials: "include",
+  });
+  if (!response.ok) {
+    throw new Error("Erreur lors de la recherche des jobs");
+  }
+  return response.json();
+};

@@ -1,7 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
 import Layout from "../../component/Layout/Layout";
-import { getJob, getUserJobLiked } from "../../lib/company.request";
-import { useState } from "react";
+import {
+  getJob,
+  getUserJobLiked,
+  getUserWhoLikedJob,
+} from "../../lib/company.request";
+import { useEffect, useState } from "react";
 import { UserProps } from "../../lib/user.utils";
 import { Button } from "@/components/ui/button";
 import {
@@ -16,26 +20,57 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { JobProps } from "../../lib/jobs.utils";
+import arrowR from "/arrow-right.svg";
 
 function SettingPage() {
   const [classIndex, setClassIndex] = useState<boolean>(true);
+  const [selectedJob, setSelectedJob] = useState<JobProps | null>(null);
+
+  const handleOpenModal = (job: JobProps) => {
+    setSelectedJob(job);
+  };
 
   const {
     data: dataJobs = [],
-    isError,
-    isLoading,
+    isError: jobError,
+    isLoading: jobLoading,
   } = useQuery({
     queryKey: ["job"],
     queryFn: getJob,
   });
 
-  const { data: dataUsers = [] } = useQuery({
+  const {
+    data: dataUsers = [],
+    isError: userError,
+    isLoading: userLoading,
+  } = useQuery({
     queryKey: ["user"],
     queryFn: getUserJobLiked,
   });
 
-  if (isLoading) return <div>Loading...</div>;
-  if (isError) return <div>Error fetching data</div>;
+  const {
+    data: usersWhoLikedJob = [],
+    isError: errorUsersWhoLikedJob,
+    isLoading: loadingUsersWhoLikedJob,
+    refetch: refetchUsersWhoLikedJob,
+  } = useQuery({
+    queryKey: ["usersByJob", selectedJob?.id],
+    queryFn: () =>
+      selectedJob ? getUserWhoLikedJob(selectedJob.id) : Promise.resolve([]),
+    enabled: !!selectedJob,
+  });
+
+  useEffect(() => {
+    if (selectedJob) {
+      refetchUsersWhoLikedJob();
+    }
+  }, [selectedJob, refetchUsersWhoLikedJob]);
+
+  console.log(selectedJob, "1", usersWhoLikedJob);
+
+  if (jobError || userError || errorUsersWhoLikedJob) return <div> error </div>;
+  if (jobLoading || userLoading || loadingUsersWhoLikedJob)
+    return <div> loading </div>;
 
   return (
     <Layout>
@@ -47,7 +82,7 @@ function SettingPage() {
               classIndex ? "bg-fontPurple text-white" : "text-black"
             }`}
           >
-            postes
+            Postes
           </div>
           <div
             onClick={() => setClassIndex(false)}
@@ -55,7 +90,7 @@ function SettingPage() {
               !classIndex ? "bg-fontPurple text-white" : "text-black"
             }`}
           >
-            étudiants
+            Étudiants
           </div>
         </div>
         {classIndex ? (
@@ -66,43 +101,40 @@ function SettingPage() {
                   <Button
                     variant="outline"
                     className="w-1/4 h-1/3 justify-center items-center rounded-xl bg-fontPurple text-white"
+                    onClick={() => handleOpenModal(job)}
                   >
                     {job.name}
                   </Button>
                 </DialogTrigger>
                 <DialogContent className="sm:max-w-[425px]">
                   <DialogHeader>
-                    <DialogTitle>Edit profile</DialogTitle>
-                    <DialogDescription>
-                      Make changes to your profile here. Click save when you're
-                      done.
-                    </DialogDescription>
+                    <DialogTitle>{job.name}</DialogTitle>
                   </DialogHeader>
-                  <div className="grid gap-4 py-4">
-                    <div className="grid grid-cols-4 items-center gap-4">
-                      <Label htmlFor="name" className="text-right">
-                        Name
-                      </Label>
-                      <Input
-                        id="name"
-                        defaultValue="Pedro Duarte"
-                        className="col-span-3"
-                      />
-                    </div>
-                    <div className="grid grid-cols-4 items-center gap-4">
-                      <Label htmlFor="username" className="text-right">
-                        Username
-                      </Label>
-                      <Input
-                        id="username"
-                        defaultValue="@peduarte"
-                        className="col-span-3"
-                      />
-                    </div>
+                  <div className="gap-4 py-4 w-full">
+                    {loadingUsersWhoLikedJob ? (
+                      <div>Chargement des utilisateurs...</div>
+                    ) : errorUsersWhoLikedJob ? (
+                      <div>Erreur lors de la récupération des utilisateurs</div>
+                    ) : !Array.isArray(usersWhoLikedJob) ||
+                      usersWhoLikedJob.length === 0 ? (
+                      <div className="text-center ">
+                        Aucun utilisateur n'a liké ce job.
+                      </div>
+                    ) : (
+                      usersWhoLikedJob.map((user: UserProps) => (
+                        <div
+                          className="items-center gap-4 w-full flex justify-center"
+                          key={user.id}
+                        >
+                          <Button className="flex justify-between gap-10 bg-gray-100 text-black border-2 border-gray-500 w-full"
+                          onClick={"/"}>
+                            {user.name}
+                            <img src={arrowR} alt="arrow-right"></img>
+                          </Button>
+                        </div>
+                      ))
+                    )}
                   </div>
-                  <DialogFooter>
-                    <Button type="submit">Save changes</Button>
-                  </DialogFooter>
                 </DialogContent>
               </Dialog>
             ))}
@@ -110,50 +142,50 @@ function SettingPage() {
         ) : (
           <div className="w-full flex flex-wrap h-full overflow-y-scroll gap-12 justify-center">
             {dataUsers.map((user: UserProps, index: number) => (
-              // <Dialog key={index}>
-              //   <DialogTrigger asChild>
-              //     <Button
-              //       variant="outline"
-              //       className="w-1/4 h-1/3 justify-center items-center rounded-xl bg-fontPurple text-white"
-              //     >
-              //       {user.name}
-              //     </Button>
-              //   </DialogTrigger>
-              //   <DialogContent className="sm:max-w-[425px]">
-              //     <DialogHeader>
-              //       <DialogTitle>Edit profile</DialogTitle>
-              //       <DialogDescription>
-              //         Make changes to your profile here. Click save when you're done.
-              //       </DialogDescription>
-              //     </DialogHeader>
-              //     <div className="grid gap-4 py-4">
-              //       <div className="grid grid-cols-4 items-center gap-4">
-              //         <Label htmlFor="name" className="text-right">
-              //           Name
-              //         </Label>
-              //         <Input
-              //           id="name"
-              //           defaultValue="Pedro Duarte"
-              //           className="col-span-3"
-              //         />
-              //       </div>
-              //       <div className="grid grid-cols-4 items-center gap-4">
-              //         <Label htmlFor="username" className="text-right">
-              //           Username
-              //         </Label>
-              //         <Input
-              //           id="username"
-              //           defaultValue="@peduarte"
-              //           className="col-span-3"
-              //         />
-              //       </div>
-              //     </div>
-              //     <DialogFooter>
-              //       <Button type="submit">Save changes</Button>
-              //     </DialogFooter>
-              //   </DialogContent>
-              // </Dialog>
-              <div>coucou</div>
+              <Dialog key={index}>
+                <DialogTrigger asChild>
+                  <Button
+                    variant="outline"
+                    className="w-1/4 h-1/3 justify-center items-center rounded-xl bg-fontPurple text-white"
+                  >
+                    {user.name}
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="sm:max-w-[425px]">
+                  <DialogHeader>
+                    <DialogTitle>Modifier le profil</DialogTitle>
+                    <DialogDescription>
+                      Faites des modifications à votre profil ici. Cliquez sur
+                      sauvegarder lorsque vous avez terminé.
+                    </DialogDescription>
+                  </DialogHeader>
+                  <div className="grid gap-4 py-4">
+                    <div className="grid grid-cols-4 items-center gap-4">
+                      <Label htmlFor="name" className="text-right">
+                        Nom
+                      </Label>
+                      <Input
+                        id="name"
+                        defaultValue={user.name}
+                        className="col-span-3"
+                      />
+                    </div>
+                    <div className="grid grid-cols-4 items-center gap-4">
+                      <Label htmlFor="username" className="text-right">
+                        Nom d'utilisateur
+                      </Label>
+                      <Input
+                        id="username"
+                        defaultValue={user.name}
+                        className="col-span-3"
+                      />
+                    </div>
+                  </div>
+                  <DialogFooter>
+                    <Button type="submit">Sauvegarder les modifications</Button>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
             ))}
           </div>
         )}
