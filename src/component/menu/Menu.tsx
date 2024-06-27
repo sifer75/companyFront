@@ -12,15 +12,21 @@ function Menu() {
     queryFn: getCompany,
   });
 
-  if (isLoading) return <div>pas trouvé</div>;
-  if (isError) return <div>pas trouvé 4</div>;
+  if (isLoading) return <div>chargement</div>;
+  if (isError) return <div>erreur</div>;
 
   return (
-    <div className="flex flex-col w-auto h-full bg-white gap-5 p-4 rounded-xl shadow-3xl bg-fontWhite">
+    <div className="flex flex-col w-80 overflow-hidden h-full bg-white gap-5 p-4 rounded-xl shadow-3xl">
       <div className="flex flex-col gap-7 h-full grow">
-        <div className="bg-fontPurple w-full flex items-center p-5 rounded-lg gap-5">
-          <Image src={data?.image} alt="company logo" className="w-20 h-20" />
-          <h1 className="text-white text-lg font-medium ">{data?.name}</h1>
+        <div className="border border-purple-300 flex items-center px-4 py-3 rounded-lg gap-5 w-full">
+          <Image
+            src={data?.image}
+            alt="company logo"
+            className="w-12 h-12 rounded-md"
+          />
+          <h1 className="text-xl truncate font-semibold first-letter:uppercase">
+            {data?.name}
+          </h1>
         </div>
         {MenuTypeList.map((menuType, index) => (
           <EnumMenuCard

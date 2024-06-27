@@ -26,7 +26,8 @@ function Dashboard() {
     queryFn: getUserJobLikedCount,
   });
 
-  if (isError || isLoading) return <div>c'est pas bon</div>;
+  if ( isLoading) return <div>chargement...</div>;
+  if (isError ) return <div>c'est pas bon</div>;
   
   const jobNumber = jobData.length;
   const userNumber = userData.userNumber;

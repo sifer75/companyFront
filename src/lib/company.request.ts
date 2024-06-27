@@ -50,6 +50,40 @@ export type Company = {
   image: string;
 };
 
+const convertToBase64 = (File: File): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      resolve(reader.result as string);
+    };
+    reader.onerror = () => {
+      reject(new Error("Erreur lors de la lecture du ficher"));
+    };
+    reader.readAsDataURL(File);
+  });
+};
+
+export const updateCompany = async (data: {
+  name: string;
+  image: File | undefined;
+}) => {
+  if (!data.image) return;
+  const imageLogoBase64 = await convertToBase64(data.image);
+  const requestData = { ...data, image: imageLogoBase64 };
+  console.log(requestData, "ffff");
+  const response = await fetch("http://localhost:3333/company/update", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    credentials: "include",
+    body: JSON.stringify(requestData),
+  });
+  if (!response.ok) {
+    return new Error("Erruer lors de la modification de la companie");
+  }
+
+  return response.json();
+};
+
 export const getCompany = async (): Promise<Company> => {
   const response = await fetch(`http://localhost:3333/company`, {
     method: "GET",
@@ -72,7 +106,7 @@ export const forgetPassword = async (data: {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ ...data }),
-    }
+    },
   );
   if (!response.ok)
     throw new Error("Erreur lors de la déconnection de l'utilisateur");
@@ -98,7 +132,7 @@ export const getUserJobLiked = async () => {
       method: "GET",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
-    }
+    },
   );
   if (!response.ok) {
     throw new Error("Erreur lors de la recherche des jobs");
@@ -113,7 +147,7 @@ export const getUserJobLikedCount = async () => {
       method: "GET",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
-    }
+    },
   );
   if (!response.ok) {
     throw new Error("Erreur lors de la recherche des jobs");
@@ -122,11 +156,14 @@ export const getUserJobLikedCount = async () => {
 };
 
 export const getUserWhoLikedJob = async (id: number) => {
-  const response = await fetch(`http://localhost:3333/user/${id}`, {
-    method: "GET",
-    headers: { "Content-Type": "application/json" },
-    credentials: "include",
-  });
+  const response = await fetch(
+    `http://localhost:3333/company/job/${id}/likedbyuser`,
+    {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+    },
+  );
   if (!response.ok) {
     throw new Error("Erreur lors de la recherche des jobs");
   }

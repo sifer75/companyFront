@@ -12,6 +12,8 @@ import Email from "./page/Connection/Forget/Email";
 import Password from "./page/Connection/Forget/Password";
 import Conversation from "./page/Conversation/Conversation";
 import SettingPage from "./page/Settings/SettingPage";
+import Account from "./page/Account";
+import UserDescription from "./page/Settings/UserDescription";
 
 function App() {
   return (
@@ -22,6 +24,7 @@ function App() {
         <Route path="/createaccount" element={<CreateAccount />} />
         <Route path="/forget/email" element={<Email />} />
         <Route path="/forget/password" element={<Password />} />
+        <Route path="/account" element={<Account />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/publishoffer" element={<PublishOffer />} />
         <Route path="/publishoffer/form" element={<Form />} />
@@ -34,7 +37,7 @@ function App() {
         <Route path="/publishoffer/finished" element={<Finished />} />
         <Route path="/conversation" element={<Conversation />} />
         <Route path="/match" element={<SettingPage />} />
-        <Route path="/settings" element={<SettingPage />} />
+        <Route path="/match/:userId" element={<UserDescription />} />
       </Routes>
     </>
   );

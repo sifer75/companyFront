@@ -8,7 +8,6 @@ function Layout({ children }: { children: ReactNode }) {
       <div className="w-full h-full bg-white flex px-8 py-8 gap-7 rounded-lg">
         {children}
       </div>
-      
     </div>
   );
 }

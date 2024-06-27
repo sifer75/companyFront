@@ -78,7 +78,7 @@ function CreateAccount() {
               Forget password?
             </Link>
           </div>
-          <Link to={"/dashboard"} className="flex justify-end">
+          <Link to={"/account"} className="flex justify-end">
             <button
               className={`flex py-1 px-2 flex-shrink-0 rounded-md shadow-md border-2 border-buttonPurple`}
               onClick={() => {

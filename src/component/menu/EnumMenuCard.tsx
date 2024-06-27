@@ -23,9 +23,14 @@ function EnumMenuCard({
       <button
         className={`${className} ${
           disabled ? "bg-fontPurple" : "bg-white"
-        } w-full h-full max-h-16 px-2 py-4 flex items-center rounded-lg gap-5`}
+        } w-full h-full px-4 py-3 flex gap-3 items-center rounded-lg`}
       >
-        <Image src={src} alt={alt} disabled={disabled} />
+        <Image
+          src={src}
+          alt={alt}
+          className="h-5 aspect-sqaure"
+          disabled={disabled}
+        />
         <p
           className={`text-lg font-medium ${
             disabled ? "text-white" : "text-textColor"
